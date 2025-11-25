@@ -1,0 +1,1 @@
+ /Users/alanflores/Documents/2er\ Parcial/Proyectos\ Flutter/Cocina/cocinakoox/restaurant_system/admin_app/.dart_tool/flutter_build/e79d7d504df5c85a326f435802285fc4/native_assets.json: 
