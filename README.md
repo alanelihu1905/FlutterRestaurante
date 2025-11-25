@@ -1,39 +1,71 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Sistema de Pedidos para Restaurante — Guía rápida
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+## Resumen
+Repositorio monorepo Flutter con tres paquetes:
+- `shared_logic/` — modelos y lógica compartida (servicios, repositorios).
+- `client_app/` — aplicación del cliente (pedidos).
+- `admin_app/` — aplicación de administración/cocina.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+## Requisitos
+- Flutter instalado (ejecutar `flutter doctor` y resolver advertencias).
+- Emulador o dispositivo Android/iOS conectado.
+- (Opcional) Cuenta de Firebase y Cloud Firestore si la app lo requiere en tu configuración.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Estructura del proyecto
+- shared_logic/
+    - `lib/models/` — definiciones de modelos (Product, Order, ...).
+    - `lib/services/` — `order_repository.dart` y servicios compartidos.
+- client_app/
+    - `lib/viewmodels/` — ChangeNotifiers usados por la UI.
+    - `lib/views/` — pantallas y widgets.
+    - `android/`, `ios/` — configuración nativa por app.
+- admin_app/ — estructura equivalente para la app de administración.
 
-## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Instalar dependencias
+Desde la raíz del repo:
+- `cd shared_logic && flutter pub get`
+- `cd ../client_app && flutter pub get`
+- `cd ../admin_app && flutter pub get`
 
-## Getting started
+Si editas `shared_logic`, vuelve a ejecutar `flutter pub get` en cada app que lo use.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+## Ejecutar (desarrollo)
+Cliente:
+- `cd client_app`
+- `flutter run -d <device-id>`
 
-## Usage
+Administrador:
+- `cd admin_app`
+- `flutter run -d <device-id>`
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Flujos típicos:
+- Cliente: ingresar nombre → ver menú → agregar productos → carrito → confirmar pedido.
+- Admin: ver dashboard, cocina (Pendiente / En preparación / Listo), editar menú.
 
-```dart
-const like = 'sample';
-```
+## Demo local (rápido)
+1. Abrir `client_app` en un dispositivo/emulador.
+2. Abrir `admin_app` en otro dispositivo/emulador.
+3. Crear pedido desde el cliente.
+4. Ver la orden en la app admin y cambiar estados (Pendiente → En preparación → Listo).
+5. Ver actualización de estado en la app cliente.
 
-## Additional information
+## Desarrollo y convenciones
+- Estado: `provider` + `ChangeNotifier`. ViewModels en `lib/viewmodels/` y registrados en `main.dart` vía `MultiProvider`.
+- Servicio compartido: instanciar `OrderRepository()` en `main.dart` y pasarlo con `Provider<OrderRepository>.value(...)`.
+- Prefiere streams expuestos por el repositorio (`watchProducts()`, `watchOrders()`) para actualizar UI.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+## Tests y builds
+- Tests:
+    - `cd client_app && flutter test`
+    - `cd admin_app && flutter test`
+    - `cd shared_logic && flutter test`
+- Builds:
+    - Android APK: `cd client_app && flutter build apk`
+
+## Consejos rápidos
+- Mantén `shared_logic` como dependencia por path; actualizar su API puede requerir cambios en ambas apps.
+- Ejecuta `flutter pub get` en las apps después de modificar `shared_logic`.
+- Usa los streams del `OrderRepository` para evitar polling manual.
+
+Si quieres, puedo generar un README en inglés, añadir ejemplos de configuración de Firebase paso a paso o incluir un diagrama simple del flujo de datos.  
