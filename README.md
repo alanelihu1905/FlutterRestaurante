@@ -1,4 +1,8 @@
-# Sistema de Pedidos para Restaurante — Guía rápida
+# Sistema de Pedidos para Restaurante
+
+## Integrantes
+- Alan Flores Denegri
+- Miranda Amaro Hernandez
 
 ## Resumen
 Repositorio monorepo Flutter con tres paquetes:
